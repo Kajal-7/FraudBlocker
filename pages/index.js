@@ -1,20 +1,24 @@
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import useEthereum from '../ethereum/useEthereum';
+import PopUp from "../components/PopUp";
 
 
 
 function Homepage() {
-  const {connectWallet, account} = useEthereum();
+  const {connectWallet, address, error} = useEthereum();
 
   useEffect(() => {
     connectWallet();
   },[]);
 
   return (
-    <div>
-      <h1>Hello! You are at Homepage</h1>
-    </div>
+    <>
+      {error ? <PopUp message={error} /> : 
+      <h1>Hello! You are at Homepage</h1>  
+      }
+      
+    </>
   );
 }
 
