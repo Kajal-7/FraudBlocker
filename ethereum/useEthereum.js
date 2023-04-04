@@ -31,7 +31,7 @@ function useEthereum(){
               signer
             );
             
-            setAccount(address);
+            setAddress(address);
             // console.log(productAuthenticationContract);
           } else {
             setError('Please install metamask to continue')
