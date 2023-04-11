@@ -183,6 +183,19 @@ contract ProductAuthentication{
         productsMap[_productHash].status = 2;
     }
 
+    // Function for checking who is the user ->new or existing and if existing then is the user
+    // manufacturer, retailer or customer
+    function whoIsTheUser(address _user) public view returns (string memory){
+        if(customersMap[_user].doesExist){
+            return "customer";
+        }else if(manufacturerMap[_user].doesExist){
+            return "manufacturer";
+        }else if(retailersMap[_user].doesExist){
+            return "retailer";
+        }
+
+        return "new";
+    } 
     modifier productNotStolen(string memory _productHash){
         require(productsMap[_productHash].status == 1, "product is stolen");
         _;

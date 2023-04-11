@@ -728,6 +728,39 @@ describe('ProductAuthentication', () => {
           .markProductAsStolen('pro_1_hash')
       ).to.be.revertedWith("you aren't the owner of this product")
 
+    })   
+  })
+
+  describe('function whoIsTheUser', () => {
+    it('user is a manufacturer', async () => {
+      const { productAuthentication, owner } =
+        await deployProductAuthenticationFixture()
+      await productAuthentication.connect(owner).createManufacturer(
+        'man_1_name',
+        'man_1_location',
+        'man_1_timestamp'
+      )
+      const user = await productAuthentication.whoIsTheUser(owner.address);
+      expect(user).to.equal("manufacturer");
+    })
+    it('user is a customer', async () => {
+      const { productAuthentication, owner} =
+        await deployProductAuthenticationFixture()
+      await productAuthentication.connect(owner).createCustomer('cus_1_name', 'cus_1_phone')
+      const user = await productAuthentication.whoIsTheUser(owner.address);
+      expect(user).to.equal("customer");
+    })
+    it('user is a retailer', async () => {
+      const { productAuthentication, owner } =
+        await deployProductAuthenticationFixture()
+      await productAuthentication.connect(owner).createRetailer('ret_1_name', 'ret_1_location')
+      const user = await productAuthentication.whoIsTheUser(owner.address);
+      expect(user).to.equal("retailer"); 
+    })
+    it("new user", async()=>{
+      const{productAuthentication, owner} = await deployProductAuthenticationFixture()
+      const user = await productAuthentication.whoIsTheUser(owner.address);
+      expect(user).to.equal("new");
     })
     
   })
