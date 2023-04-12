@@ -3,7 +3,7 @@ import {useState } from "react";
 import contractJSON from './ProductAuthentication.json';
 
 function useEthereum(){
-    const [address, setAddress]= useState();
+    const [account, setAccount]= useState(null);
     const [error, setError] = useState(null);
     
     //Function to connect metamask wallet
@@ -22,7 +22,6 @@ function useEthereum(){
               window.location.reload();
             });
   
-            
             const signer = provider.getSigner();
             const address = await signer.getAddress();
             const productAuthenticationContract = new ethers.Contract(
@@ -30,8 +29,8 @@ function useEthereum(){
               contractJSON.abi,
               signer
             );
-            
-            setAddress(address);
+            setAccount(address);
+            // console.log(address);
             // console.log(productAuthenticationContract);
           } else {
             setError('Please install metamask to continue')
@@ -43,7 +42,7 @@ function useEthereum(){
 
     return {
         connectWallet,
-        address,
+        account,
         error
         
     }

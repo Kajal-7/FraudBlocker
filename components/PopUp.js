@@ -30,7 +30,7 @@ export default function PopUp({message}) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{color: "#070707"}}>
              {message}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
