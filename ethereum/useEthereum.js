@@ -6,7 +6,7 @@ function useEthereum(){
     const [account, setAccount]= useState(null);
     const [error, setError] = useState(null);
     const [contract, setContract] = useState();
-
+   const [user, setUser] = useState(null);
     //Function to connect metamask wallet
     const connectWallet = async () => {
         try {
@@ -26,17 +26,21 @@ function useEthereum(){
             const signer = provider.getSigner();
             const address = await signer.getAddress();
             const productAuthenticationContract = new ethers.Contract(
-              "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+              '0x5FbDB2315678afecb367f032d93F642f64180aa3',
               contractJSON.abi,
               signer
-            );
-            setAccount(address);
+            )
+           
+            const _user = await productAuthenticationContract.whoIsTheUser(address)
+            console.log(address)
+            setUser(_user)
+            setAccount(address)
             setContract(productAuthenticationContract);
           } else {
             setError('Please install metamask to continue')
           }
         } catch (err) {
-          console.log(err);
+          console.log('Error',err);
         }
       };
 
@@ -44,7 +48,8 @@ function useEthereum(){
         connectWallet,
         account,
         error,
-        contract
+        contract,
+        user
     }
 };
 

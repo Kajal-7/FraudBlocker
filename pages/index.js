@@ -4,29 +4,28 @@ import useEthereum from "../ethereum/useEthereum";
 import PopUp from "../components/PopUp";
 import Image from "next/image";
 import { Grid, Button, Typography, AppBar, Toolbar } from "@mui/material";
+import { useRouter } from "next/router";
 
 function Homepage() {
-  const { connectWallet, account, error, contract} = useEthereum();
-  const[user, setUser] = useState();
+  const { connectWallet, account, error, contract,user} = useEthereum();
+
+  const router  = useRouter()
 
   useEffect(() => {
-    connectWallet();
-    if(account){
-      const checkUser= async()=>{
-       try{
-        const _user = await contract.whoIsTheUser(account);
-        setUser(_user);
-       }catch(err){
-        console.log(err)
-       }
-      }
-      checkUser();
-    }
+    connectWallet();   
   }, []);
 
+  useEffect(()=>{console.log(user)},[user])
+
   function handleClick() {
-    if (account) alert("Metamask connected and user is " + user);
-    else alert("Metamask not connected");
+    if (user === null) {
+      alert('Connect metamask')
+    } 
+    else if (user === 'new') router.push('/new-user')
+    else if (user === 'customer') router.push('/customer')
+    else if(user === "retailer") router.push('/retailer')
+    else router.push('/manufacturer')
+    
   }
 
   const styleGsBtn = {
