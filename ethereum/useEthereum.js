@@ -5,7 +5,8 @@ import contractJSON from './ProductAuthentication.json';
 function useEthereum(){
     const [account, setAccount]= useState(null);
     const [error, setError] = useState(null);
-    
+    const [contract, setContract] = useState();
+
     //Function to connect metamask wallet
     const connectWallet = async () => {
         try {
@@ -25,13 +26,12 @@ function useEthereum(){
             const signer = provider.getSigner();
             const address = await signer.getAddress();
             const productAuthenticationContract = new ethers.Contract(
-              "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+              "0x5FbDB2315678afecb367f032d93F642f64180aa3",
               contractJSON.abi,
               signer
             );
             setAccount(address);
-            // console.log(address);
-            // console.log(productAuthenticationContract);
+            setContract(productAuthenticationContract);
           } else {
             setError('Please install metamask to continue')
           }
@@ -43,8 +43,8 @@ function useEthereum(){
     return {
         connectWallet,
         account,
-        error
-        
+        error,
+        contract
     }
 };
 
