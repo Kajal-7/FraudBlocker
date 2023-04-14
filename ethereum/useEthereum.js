@@ -6,7 +6,7 @@ function useEthereum(){
     const [account, setAccount]= useState(null);
     const [error, setError] = useState(null);
     const [contract, setContract] = useState();
-   const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
     //Function to connect metamask wallet
     const connectWallet = async () => {
         try {

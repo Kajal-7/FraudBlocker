@@ -7,15 +7,13 @@ import { Grid, Button, Typography, AppBar, Toolbar } from "@mui/material";
 import { useRouter } from "next/router";
 
 function Homepage() {
-  const { connectWallet, account, error, contract,user} = useEthereum();
+  const { connectWallet, error, user } = useEthereum();
 
   const router  = useRouter()
 
   useEffect(() => {
     connectWallet();   
   }, []);
-
-  useEffect(()=>{console.log(user)},[user])
 
   function handleClick() {
     if (user === null) {

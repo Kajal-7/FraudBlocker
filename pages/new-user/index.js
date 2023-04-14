@@ -1,25 +1,22 @@
 import React, { useState } from 'react'
 import Card from '../../components/Card'
-import Form from '../../components/FormCustomer'
+import FormCustomer from '../../components/FormCustomer'
+import FormRetailer from '../../components/FormRetailer'
+import FormManufacturer from '../../components/FormManufacturer'
 import { Button } from '@mui/material';
 import BackButton from '../../components/BackButton';
 
 const index = () => {
 
-    const [formSelected, setFormSelected] = useState('Retailer');
+    const [formSelected, setFormSelected] = useState('Customer');
     const [flip, setFlip] = useState(false);
 
     const backContent = (
       <div>
         <BackButton onClick={()=>setFlip(false)}/>
-        <Form
-          formInputs={
-            formSelected === 'Customer'
-              ? formInputsCustomer
-              : formInputsManufacturerAndRetailer
-          }
-          formTitle={`Register As ${formSelected}`}
-        />
+        {formSelected==='Customer' &&  <FormCustomer/>}
+        {formSelected==='Retailer' &&  <FormRetailer/>}
+        {formSelected==='Manufacturer' &&  <FormManufacturer/>}
       </div>
     )
 
