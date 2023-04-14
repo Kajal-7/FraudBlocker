@@ -12,9 +12,18 @@ const FormManufacturer = () => {
 
   function handleSubmit(){
      const addManufacturer = async()=>{
-      await contract.createManufacturer(name, location);
+     
+      await contract.createManufacturer(name, location, Date.now().toString());
+      
+      console.log("added as manufacturer")
+      
      }
-     addManufacturer();
+     try {
+      addManufacturer()
+     } catch (error) {
+      console.log(error)
+     }
+     
   }
 
   return (

@@ -32,7 +32,9 @@ function useEthereum(){
             )
            
             const _user = await productAuthenticationContract.whoIsTheUser(address)
-            console.log(address)
+
+          
+
             setUser(_user)
             setAccount(address)
             setContract(productAuthenticationContract);
@@ -44,12 +46,15 @@ function useEthereum(){
         }
       };
 
+    
+
     return {
         connectWallet,
         account,
         error,
         contract,
-        user
+        user,
+        
     }
 };
 
