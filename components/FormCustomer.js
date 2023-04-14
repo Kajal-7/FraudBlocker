@@ -1,10 +1,15 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import useEthereum from "../ethereum/useEthereum";
 
 const FormCustomer = () => {
-  const {contract} = useEthereum();
+  const {connectWallet, contract, account} = useEthereum();
   const [name, setname] = useState();
   const [phoneNo, setphoneNo] = useState();
   const [success, setsuccess] = useState(false);
+
+  useEffect(() => {
+    connectWallet();   
+  }, []);
 
   function handleSubmit(){
      const addCustomer = async()=>{
