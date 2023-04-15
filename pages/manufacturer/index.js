@@ -1,36 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import Card from '../../components/Card'
-import FormCustomer from '../../components/Forms/FormCustomer'
-import FormRetailer from '../../components/Forms/FormRetailer'
-import FormManufacturer from '../../components/Forms/FormManufacturer'
 import { Button } from '@mui/material'
 import BackButton from '../../components/BackButton'
 import FormCreateProduct from '../../components/Forms/FormCreateProduct'
 import useEthereum from '../../ethereum/useEthereum'
+import FormVerifyProduct from '../../components/Forms/FormVerifyProduct'
+import FormMarkProductAsStolen from '../../components/Forms/FormMarkProductAsStolen'
+import FormAddRetailerToProduct from '../../components/Forms/FormAddRetailerToProduct'
+import styles from '../../styles/Button.module.css';
 
 const index = () => {
+
+  const {contract,connectWallet} = useEthereum()
+  useEffect(()=>{connectWallet()},[])
+
   const [formSelected, setFormSelected] = useState('Customer')
   const [flip, setFlip] = useState(false)
   
-  const {contract,connectWallet} = useEthereum()
-
-  useEffect(()=>{connectWallet()},[])
-
- 
-
   const backContent = (
     <div>
       <BackButton onClick={() => {setFlip(false); }} />
-      {formSelected === 'Verify Product' && <FormCreateProduct />}
+      {formSelected === 'Verify Product' && <FormVerifyProduct contract={contract} />}
       {formSelected === 'Create Product' && <FormCreateProduct contract={contract}/>}
-      {formSelected === 'Add Retailer' && <FormManufacturer />}
-      {formSelected === 'Mark Product As Stolen' && <FormManufacturer />}
+      {formSelected === 'Add Retailer' && <FormAddRetailerToProduct contract={contract} />}
+      {formSelected === 'Mark Product As Stolen' && <FormMarkProductAsStolen contract={contract} />}
     </div>
   )
 
   const frontContent = (
     <div>
       <Button
+        className={styles.btn}
         onClick={() => {
           setFlip(true)
           setFormSelected('Verify Product')
@@ -39,6 +39,7 @@ const index = () => {
         Verify Product
       </Button>
       <Button
+        className={styles.btn}
         onClick={() => {
           setFlip(true)
           setFormSelected('Create Product')
@@ -47,6 +48,7 @@ const index = () => {
         Create Product
       </Button>
       <Button
+        className={styles.btn}
         onClick={() => {
           setFlip(true)
           setFormSelected('Add Retailer')
@@ -55,6 +57,7 @@ const index = () => {
         Add Retailer
       </Button>
       <Button
+        className={styles.btn}
         onClick={() => {
           setFlip(true)
           setFormSelected('Mark Product As Stolen')

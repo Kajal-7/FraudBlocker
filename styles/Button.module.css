@@ -1,0 +1,26 @@
+.styleGsBtn  {
+    margin-top: 50px;
+    font-size: 18px;
+    font-weight: 400;
+    background-color: #029C54;
+    width: 170px;
+}
+.styleGsBtn:hover {
+    background-color: #3BBB53;
+}
+
+.styleHelpBtn {
+    margin-right: 20px;
+    font-size: 18px;
+    font-weight: 400;
+    background-color: #FF6F4F;
+}
+.styleHelpBtn:hover {
+    background-color: #FF6341;
+}
+
+.btn{
+    font-size: 18px;
+    font-weight: 500;
+    width: 250px
+}

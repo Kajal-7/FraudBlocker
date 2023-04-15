@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
 import useEthereum from "../ethereum/useEthereum";
 import PopUp from "../components/PopUp";
 import Image from "next/image";
 import { Grid, Button, Typography, AppBar, Toolbar } from "@mui/material";
 import { useRouter } from "next/router";
+import styles from '../styles/Button.module.css';
 
 function Homepage() {
   const { connectWallet, error, user,account } = useEthereum();
@@ -26,27 +26,6 @@ function Homepage() {
     
   }
 
-  const styleGsBtn = {
-    marginTop: "50px",
-    fontSize: "18px",
-    fontWeight: "400",
-    boxShadow: 0,
-    bgcolor: "#029C54",
-    '&:hover': {
-      backgroundColor: "#3BBB53",
-    },
-  };
-  const styleHelpBtn = {
-    marginRight: "20px",
-    fontSize: "18px",
-    fontWeight: "400",
-    boxShadow: 0,
-    bgcolor: "#FF6F4F",
-    '&:hover': {
-      backgroundColor: "#FF6341",
-    },
-  };
-
   return (
     <div>
       <AppBar position="static" elevation={0} sx={{ bgcolor: "#070707" }}>
@@ -56,7 +35,7 @@ function Homepage() {
           </Typography>
           <Button
             variant="contained"
-            sx={styleHelpBtn}
+            className={styles.styleHelpBtn}
           >
             Help
           </Button>
@@ -79,7 +58,7 @@ function Homepage() {
               </Typography>
               <Button
                 variant="contained"
-                sx={styleGsBtn}
+                className={styles.styleGsBtn}
                 onClick={handleClick}
               >
                 Get Started

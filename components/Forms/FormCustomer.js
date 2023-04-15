@@ -1,40 +1,73 @@
-import { useState, useEffect } from "react"
-import useEthereum from "../../ethereum/useEthereum";
+import { useState, useEffect} from "react";
+import Loader from "../Loader";
+import { Alert } from '@mui/material'
 
-const FormCustomer = () => {
-  const {connectWallet, contract, account} = useEthereum();
+const FormCustomer = ({ contract }) => {
   const [name, setname] = useState();
   const [phoneNo, setphoneNo] = useState();
   const [success, setsuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    connectWallet();   
-  }, []);
+  useEffect(()=>{
+    setsuccess(false);
+    setError(false);
+  },[])
 
-  function handleSubmit(){
-     const addCustomer = async()=>{
+  function handleSubmit() {
+    setLoading(true);
+    const addCustomer = async () => {
       await contract.createCustomer(name, phoneNo);
-     }
-     addCustomer()
-  }
-
-  return (
-    <div className='container'>
-      <div className='card'>
-        <a className='singup'>Register As Customer</a>
-        <div className='inputBox1'>
-          <input type="text" required='required' onChange={(e)=>setname(e.target.value)} value={name}/>
-          <span className='user'>Name</span>
-        </div>
-        <div className='inputBox1'>
-          <input type="text" required='required' onChange={(e)=>setphoneNo(e.target.value)} value={phoneNo}/>
-          <span className='user'>Phone Number</span>
-        </div>
-        <button className='enter' onClick={handleSubmit}>Submit</button>
-        {success && <Alert severity="success">Customer Added Successfully</Alert>}
-      </div>
-    </div>
-  )
+    };
+    addCustomer()
+      .then(() => {
+        setLoading(false);
+        setsuccess(true);
+        if (error) setError(false);
+      })
+      .catch((e) => {
+        setLoading(false);
+        if (success) setsuccess(false);
+        setError(e.reason);
+      });
+    setname('');
+    setphoneNo('');
 }
 
-export default FormCustomer
+  return (
+    <div className="container">
+      <div className="card">
+        <a className="singup">Register As Customer</a>
+        <div className="inputBox1">
+          <input
+            type="text"
+            required="required"
+            onChange={(e) => setname(e.target.value)}
+            value={name}
+          />
+          <span className="user">Name</span>
+        </div>
+        <div className="inputBox1">
+          <input
+            type="text"
+            required="required"
+            onChange={(e) => setphoneNo(e.target.value)}
+            value={phoneNo}
+          />
+          <span className="user">Phone Number</span>
+        </div>
+        {loading ? (<Loader/>) :  (<button className="enter" onClick={handleSubmit}>
+          Submit
+        </button>)}
+        {success && (
+          <Alert style={{ backgroundColor: 'transparent' }} severity="success">Customer Added Successfully</Alert>
+        )}
+        {error && (
+          <Alert style={{ backgroundColor: 'transparent' }} severity="error">{error}</Alert>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default FormCustomer;

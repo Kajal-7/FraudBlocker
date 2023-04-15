@@ -12,8 +12,8 @@ body {
 
 .flip-card {
   background-color: transparent;
-  width: 190px;
-  height: 254px;
+  width: 300px;
+  height: 350px;
   perspective: 1000px;
   font-family: sans-serif;
 }

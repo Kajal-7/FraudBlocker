@@ -1,27 +1,36 @@
 import { useState, useEffect } from "react"
-import useEthereum from '../../ethereum/useEthereum'
+import Loader from "../Loader";
+import { Alert } from '@mui/material'
 
-const FormManufacturer = () => {
-  const {connectWallet, contract, account} = useEthereum();
+const FormManufacturer = ({contract}) => {
+  
   const [name, setname] = useState();
   const [location, setlocation] = useState();
+  const [success, setsuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    connectWallet();   
-  }, []);
+  useEffect(()=>{
+    setsuccess(false);
+    setError(false);
+  },[])
 
   function handleSubmit(){
      const addManufacturer = async()=>{
-     
       await contract.createManufacturer(name, location, Date.now().toString());
-
      }
-     try {
-      addManufacturer()
-     } catch (error) {
-      console.log(error)
-     }
-     
+    addManufacturer().then(() => {
+      setLoading(false);
+      setsuccess(true);
+      if (error) setError(false);
+    })
+    .catch((e) => {
+      setLoading(false);
+      if (success) setsuccess(false);
+      setError(e.reason);
+    });
+  setname('');
+  setlocation(''); 
   }
 
   return (
@@ -36,7 +45,13 @@ const FormManufacturer = () => {
           <input type="text" required='required' onChange={(e)=>setlocation(e.target.value)} value={location}/>
           <span className='user'>Location</span>
         </div>
-        <button className='enter' onClick={handleSubmit}>Submit</button>
+        {loading ? (<Loader/>) : <button className='enter' onClick={handleSubmit}>Submit</button>}
+        {success && (
+          <Alert style={{ backgroundColor: 'transparent' }} severity="success">Manufacturer Added Successfully</Alert>
+        )}
+        {error && (
+          <Alert style={{ backgroundColor: 'transparent' }} severity="error">{error}</Alert>
+        )}
       </div>
     </div>
   )
