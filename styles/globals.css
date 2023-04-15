@@ -4,7 +4,6 @@
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif !important;
-  color: #F3f3f3
 }
 
 body {
@@ -65,3 +64,4 @@ body {
   color: white;
   transform: rotateY(180deg);
 }
+

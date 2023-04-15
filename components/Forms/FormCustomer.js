@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react"
-import useEthereum from "../ethereum/useEthereum";
+import useEthereum from "../../ethereum/useEthereum";
 
-const FormRetailer = () => {
+const FormCustomer = () => {
   const {connectWallet, contract, account} = useEthereum();
   const [name, setname] = useState();
-  const [location, setlocation] = useState();
+  const [phoneNo, setphoneNo] = useState();
+  const [success, setsuccess] = useState(false);
 
   useEffect(() => {
     connectWallet();   
   }, []);
 
   function handleSubmit(){
-     const addRetailer = async()=>{
-      await contract.createRetailer(name, location);
+     const addCustomer = async()=>{
+      await contract.createCustomer(name, phoneNo);
      }
-     addRetailer();
+     addCustomer()
   }
 
   return (
@@ -26,13 +27,14 @@ const FormRetailer = () => {
           <span className='user'>Name</span>
         </div>
         <div className='inputBox1'>
-          <input type="text" required='required' onChange={(e)=>setlocation(e.target.value)} value={location}/>
-          <span className='user'>Location</span>
+          <input type="text" required='required' onChange={(e)=>setphoneNo(e.target.value)} value={phoneNo}/>
+          <span className='user'>Phone Number</span>
         </div>
         <button className='enter' onClick={handleSubmit}>Submit</button>
+        {success && <Alert severity="success">Customer Added Successfully</Alert>}
       </div>
     </div>
   )
 }
 
-export default FormRetailer
+export default FormCustomer

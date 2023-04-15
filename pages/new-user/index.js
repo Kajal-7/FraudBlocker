@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import Card from '../../components/Card'
-import FormCustomer from '../../components/FormCustomer'
-import FormRetailer from '../../components/FormRetailer'
-import FormManufacturer from '../../components/FormManufacturer'
+import FormCustomer from '../../components/Forms/FormCustomer'
+import FormRetailer from '../../components/Forms/FormRetailer'
+import FormManufacturer from '../../components/Forms/FormManufacturer'
 import { Button } from '@mui/material';
 import BackButton from '../../components/BackButton';
 

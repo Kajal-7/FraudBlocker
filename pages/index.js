@@ -7,7 +7,7 @@ import { Grid, Button, Typography, AppBar, Toolbar } from "@mui/material";
 import { useRouter } from "next/router";
 
 function Homepage() {
-  const { connectWallet, error, user } = useEthereum();
+  const { connectWallet, error, user,account } = useEthereum();
 
   const router  = useRouter()
 
@@ -16,7 +16,7 @@ function Homepage() {
   }, []);
 
   function handleClick() {
-    if (user === null) {
+    if (account === undefined) {
       alert('Connect metamask')
     } 
     else if (user === 'new') router.push('/new-user')
@@ -67,7 +67,7 @@ function Homepage() {
         <Grid className="grid" container spacing={2}>
           <Grid item lg={6}>
             <div>
-              <Typography sx={{ margin: "20px 0px" }} variant="h2">
+              <Typography sx={{ margin: "20px 0px", color: 'white' }} variant="h2">
                 About Us
               </Typography>
               <Typography sx={{ margin: "20px 0px", color: "#DAC6FB" }}>

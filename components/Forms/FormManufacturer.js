@@ -1,40 +1,45 @@
 import { useState, useEffect } from "react"
-import useEthereum from "../ethereum/useEthereum";
+import useEthereum from '../../ethereum/useEthereum'
 
-const FormCustomer = () => {
+const FormManufacturer = () => {
   const {connectWallet, contract, account} = useEthereum();
   const [name, setname] = useState();
-  const [phoneNo, setphoneNo] = useState();
-  const [success, setsuccess] = useState(false);
+  const [location, setlocation] = useState();
 
   useEffect(() => {
     connectWallet();   
   }, []);
 
   function handleSubmit(){
-     const addCustomer = async()=>{
-      await contract.createCustomer(name, phoneNo);
+     const addManufacturer = async()=>{
+     
+      await contract.createManufacturer(name, location, Date.now().toString());
+
      }
-     addCustomer()
+     try {
+      addManufacturer()
+     } catch (error) {
+      console.log(error)
+     }
+     
   }
 
   return (
     <div className='container'>
       <div className='card'>
-        <a className='singup'>Register As Customer</a>
+        <a className='singup'>Register As Manufacturer</a>
         <div className='inputBox1'>
           <input type="text" required='required' onChange={(e)=>setname(e.target.value)} value={name}/>
           <span className='user'>Name</span>
         </div>
         <div className='inputBox1'>
-          <input type="text" required='required' onChange={(e)=>setphoneNo(e.target.value)} value={phoneNo}/>
-          <span className='user'>Phone Number</span>
+          <input type="text" required='required' onChange={(e)=>setlocation(e.target.value)} value={location}/>
+          <span className='user'>Location</span>
         </div>
         <button className='enter' onClick={handleSubmit}>Submit</button>
-        {success && <Alert severity="success">Customer Added Successfully</Alert>}
       </div>
     </div>
   )
 }
 
-export default FormCustomer
+export default FormManufacturer
