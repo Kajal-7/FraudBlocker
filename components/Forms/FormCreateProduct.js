@@ -1,3 +1,4 @@
+const crypto = require('crypto')
 import { Alert } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Loader from '../Loader'
@@ -10,22 +11,28 @@ const FormCreateProduct = ({ contract }) => {
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  function generateHash() {
+    const buffer = crypto.randomBytes(32) // generates 32 random bytes
+    const hash = buffer.toString('hex') // converts the buffer to a hexadecimal string
+    return hash
+  }
+
+  const randomHash = generateHash() // generates a random hash
   function handleSubmit() {
     setLoading(true)
     const createProduct = async () => {
-      await contract.createProduct('dsaddasdddddda', brand, model, description)
+      await contract.createProduct(generateHash(), brand, model, description)
     }
 
     createProduct()
       .then(() => {
         setLoading(false)
-        if(error) setError(false)
+        if (error) setError(false)
         setSuccess(true)
-        
       })
       .catch((e) => {
         setLoading(false)
-        if(success) setSuccess(false)
+        if (success) setSuccess(false)
         setError(e.reason)
       })
     setBrand('')
@@ -33,10 +40,10 @@ const FormCreateProduct = ({ contract }) => {
     setModel('')
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     setError(false)
     setSuccess(false)
-  },[])
+  }, [])
 
   return (
     <div className='container'>
