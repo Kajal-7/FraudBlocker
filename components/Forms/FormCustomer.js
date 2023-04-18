@@ -1,8 +1,10 @@
 import { useState, useEffect} from "react";
 import Loader from "../Loader";
 import { Alert } from '@mui/material'
+import { useRouter } from "next/router";
 
 const FormCustomer = ({ contract }) => {
+  const router = useRouter();
   const [name, setname] = useState();
   const [phoneNo, setphoneNo] = useState();
   const [success, setsuccess] = useState(false);
@@ -24,6 +26,7 @@ const FormCustomer = ({ contract }) => {
         setLoading(false);
         setsuccess(true);
         if (error) setError(false);
+        router.push("/customer")
       })
       .catch((e) => {
         setLoading(false);

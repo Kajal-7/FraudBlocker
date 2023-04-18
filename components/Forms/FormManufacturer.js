@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react"
 import Loader from "../Loader";
 import { Alert } from '@mui/material'
+import { useRouter } from "next/router";
 
 const FormManufacturer = ({contract}) => {
-  
+  const router = useRouter();
   const [name, setname] = useState();
   const [location, setlocation] = useState();
   const [success, setsuccess] = useState(false);
@@ -23,6 +24,7 @@ const FormManufacturer = ({contract}) => {
       setLoading(false);
       setsuccess(true);
       if (error) setError(false);
+      router.push('/manufacturer');
     })
     .catch((e) => {
       setLoading(false);
