@@ -5,6 +5,8 @@ import { Button } from "@mui/material";
 import styles from "../../styles/Button.module.css";
 import BackButton from "../../components/BackButton";
 import FormVerifyProduct from "../../components/Forms/FormVerifyProduct";
+import FormMarkProductAsStolen from "../../components/Forms/FormMarkProductAsStolen";
+import FormTransferOwnership from "../../components/Forms/FormTransferOwnership";
 
 const index = () => {
   const { contract, connectWallet } = useEthereum();
@@ -15,14 +17,28 @@ const index = () => {
     connectWallet();
   }, []);
 
+  const addNewOwner = async (qrCodeValue,address) =>{
+    await contract.transferOwnershipFromCustomer(qrCodeValue,address)
+  }
+
   const backContent = (
     <div>
-    <BackButton onClick={()=>{setFlip(false);}}></BackButton>
-    {formSelected==='Verify Product' && <FormVerifyProduct contract={contract}/>}
-    {formSelected==='Transfer From Retailer To Initial Owner' && <FormVerifyProduct contract={contract}/>}
-    {formSelected==='Mark Product As Stolen' && <FormVerifyProduct contract={contract}/>}
+      <BackButton
+        onClick={() => {
+          setFlip(false)
+        }}
+      ></BackButton>
+      {formSelected === 'Verify Product' && (
+        <FormVerifyProduct contract={contract} />
+      )}
+      {formSelected === 'Transfer From Customer To Customer' && (
+        <FormTransferOwnership addNewOwner={addNewOwner}/>
+      )}
+      {formSelected === 'Mark Product As Stolen' && (
+        <FormMarkProductAsStolen contract={contract} />
+      )}
     </div>
-  );
+  )
   const frontContent = (
     <div>
       <Button
@@ -38,7 +54,7 @@ const index = () => {
         className={styles.btn}
         onClick={() => {
           setFlip(true);
-          setFormSelected("Transfer From Retailer To Initial Owner");
+          setFormSelected("Transfer From Customer To Customer");
         }}
       >
         Transfer Ownership

@@ -1,7 +1,11 @@
 const crypto = require('crypto')
-import { Alert } from '@mui/material'
+import { Alert, Button } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import Loader from '../Loader'
+import { useRouter } from 'next/router'
+import QRCode from 'qrcode'
+
+
 
 const FormCreateProduct = ({ contract }) => {
   const [brand, setBrand] = useState()
@@ -10,6 +14,9 @@ const FormCreateProduct = ({ contract }) => {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [hash, setHash] = useState();
+  const [qrcodeImg, setQrcodeImg] = useState();
+
 
   function generateHash() {
     const buffer = crypto.randomBytes(32) // generates 32 random bytes
@@ -17,15 +24,28 @@ const FormCreateProduct = ({ contract }) => {
     return hash
   }
 
-  const randomHash = generateHash() // generates a random hash
+  const generateQRCode = async () => {
+    try {
+      const response = await QRCode.toDataURL(hash)
+      setQrcodeImg(response)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+ 
   function handleSubmit() {
     setLoading(true)
+    setHash(generateHash())
     const createProduct = async () => {
-      await contract.createProduct(generateHash(), brand, model, description)
+      await contract.createProduct(hash, brand, model, description)
+      await generateQRCode()
+      
     }
 
     createProduct()
       .then(() => {
+        
         setLoading(false)
         if (error) setError(false)
         setSuccess(true)
@@ -89,9 +109,15 @@ const FormCreateProduct = ({ contract }) => {
           </Alert>
         )}
         {success && (
-          <Alert style={{ backgroundColor: 'transparent' }} severity='success'>
-            Product Added Successfully
-          </Alert>
+          <>
+            <Alert
+              style={{ backgroundColor: 'transparent' }}
+              severity='success'
+            >
+              Product Added Successfully
+            </Alert>
+            {qrcodeImg && <img src={qrcodeImg}></img>}
+          </>
         )}
       </div>
     </div>

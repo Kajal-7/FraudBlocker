@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Card from '../../components/Card'
-import { Button } from '@mui/material'
+import { Button, Grid } from '@mui/material'
 import BackButton from '../../components/BackButton'
 import FormCreateProduct from '../../components/Forms/FormCreateProduct'
 import useEthereum from '../../ethereum/useEthereum'
 import FormVerifyProduct from '../../components/Forms/FormVerifyProduct'
 import FormMarkProductAsStolen from '../../components/Forms/FormMarkProductAsStolen'
-import FormAddRetailerToProduct from '../../components/Forms/FormAddRetailerToProduct'
 import styles from '../../styles/Button.module.css';
+import FormTransferOwnership from '../../components/Forms/FormTransferOwnership'
 
 const index = () => {
 
@@ -16,13 +16,17 @@ const index = () => {
 
   const [formSelected, setFormSelected] = useState('Customer')
   const [flip, setFlip] = useState(false)
+
+  const addRetailer = async (qrCodeValue,address) => {
+    await contract.addRetailerToProduct(qrCodeValue,address)
+  }
   
   const backContent = (
     <div>
       <BackButton onClick={() => {setFlip(false); }} />
       {formSelected === 'Verify Product' && <FormVerifyProduct contract={contract} />}
       {formSelected === 'Create Product' && <FormCreateProduct contract={contract}/>}
-      {formSelected === 'Add Retailer' && <FormAddRetailerToProduct contract={contract} />}
+      {formSelected === 'Add Retailer' && <FormTransferOwnership addNewOwner={addRetailer} />}
       {formSelected === 'Mark Product As Stolen' && <FormMarkProductAsStolen contract={contract} />}
     </div>
   )
@@ -69,15 +73,8 @@ const index = () => {
   )
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Card flip={flip} frontContent={frontContent} backContent={backContent} />
+    <div style={{display:'flex', justifyContent:'center', alignItems:'center', height:'100vh'}}>
+      <Card frontContent={frontContent} backContent={backContent} flip={flip}/>
     </div>
   )
 }

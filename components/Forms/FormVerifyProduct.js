@@ -1,53 +1,49 @@
-import { useEffect, useState } from "react"
-import FileUpload from "../file-upload/FileUpload"
-import { UploadFileBtn } from "../file-upload/file-upload.styles"
+import { useEffect, useRef, useState } from 'react'
+import Loader from '../Loader'
+import { Alert } from '@mui/material'
+import Quagga from 'quagga'
+import {QrReader}  from 'react-qr-reader'
 
-const FormVerifyProduct = ({contract}) => {
-  const [brand, setBrand] = useState()
-  const [model, setModel] = useState()
-  const [description, setDescription] = useState()
+const FormVerifyProduct = ({ contract }) => {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [qrCodeValue, setQRCodeValue] = useState()
+  const [productDetails, setProductDetails] = useState();
 
-  const [qrCode, setQrcode] = useState();
-
-  const handleFileInput = (e) => {
-    const file = e.target.files[0]
-    const reader = new FileReader()
-
-    reader.onloadend = () => {
-      const imageBlob = new Blob([reader.result], { type: file.type })
-      setQrcode(imageBlob)
+   const verifyProduct = async () => {
+    const productDetails = await contract.getProductDetails(qrCodeValue)
+    const productObj = {
+      product: {
+        brand: productDetails[1],
+        model: productDetails[2],
+        description: productDetails[3],
+        status: parseInt(productDetails.status._hex, 16),
+      },
+      manufacturer: {
+        name: productDetails[4].name,
+        location: productDetails[4].location,
+      },
+      retailer: {
+        name: productDetails[5].name,
+        location: productDetails[5].location,
+      },
+      customers: productDetails[6],
     }
+    setProductDetails(productObj)
+   }
 
-    reader.readAsArrayBuffer(file)
-  }
+   useEffect(()=>{
+      if(qrCodeValue){
+        verifyProduct()
+      }
+   },[qrCodeValue])
 
-  function handleSubmit() {
-    setLoading(true)
-    const createProduct = async () => {
-      await contract.createProduct('dsaddasdddddda', brand, model, description)
-    }
-
-    createProduct()
-      .then(() => {
-        setLoading(false)
-        if (error) setError(false)
-        setSuccess(true)
-      })
-      .catch((e) => {
-        setLoading(false)
-        if (success) setSuccess(false)
-        setError(e.reason)
-      })
-    setBrand('')
-    setDescription('')
-    setModel('')
-  }
+ 
 
   useEffect(() => {
     setError(false)
+    setLoading(false)
     setSuccess(false)
   }, [])
 
@@ -56,21 +52,62 @@ const FormVerifyProduct = ({contract}) => {
       <div className='card'>
         <a className='singup'>Verify A Product</a>
         <div className='inputBox1'>
-          <input type='file' onChange={handleFileInput}>
-            Upload QR Code
-          </input>
-          {qrCode && (
-            <img src={URL.createObjectURL(qrCode)} alt='Uploaded Image' />
-          )}
+          <QrReader
+            onResult={(result, error) => {
+              if (!!result) {
+                setQRCodeValue(result?.text)
+              }
+
+              if (!!error) {
+                console.info(error)
+              }
+            }}
+            style={{ width: '100%' }}
+          />
         </div>
 
-        {loading ? (
-          <Loader />
-        ) : (
-          <button className='enter' onClick={handleSubmit}>
-            Submit
-          </button>
+        {productDetails && (
+          <div>
+            <div>
+              <h3>Product:</h3>
+              {productDetails.product.status === 2 && <Alert severity='error'>Product Is Stolen!</Alert>}
+              <p>
+                Brand: {productDetails.product.brand} <br />
+                Model: {productDetails.product.model} <br />
+                Description: {productDetails.product.description}
+              </p>
+            </div>
+            <div>
+              <h3>Manufacturer: </h3>
+              <p>
+                Name: {productDetails.manufacturer.name} <br />
+                Location: {productDetails.manufacturer.location}
+              </p>
+            </div>
+            <div>
+              <h3>Retailer: </h3>
+              <p>
+                Name: {productDetails.retailer.name} <br />
+                Location: {productDetails.retailer.location}
+              </p>
+            </div>
+            <div>
+              <h3>Customers: </h3>
+              <ul>
+                {productDetails.customers.map(customer => 
+                  <li>
+                    Name: {customer.name}
+                    Phone: {customer.phone}
+                  </li>
+                )}
+              </ul>
+              
+            </div>
+          </div>
         )}
+
+        {loading && <Loader />}
+
         {error && (
           <Alert style={{ backgroundColor: 'transparent' }} severity='error'>
             {error}
@@ -84,7 +121,6 @@ const FormVerifyProduct = ({contract}) => {
       </div>
     </div>
   )
-
 }
 
 export default FormVerifyProduct

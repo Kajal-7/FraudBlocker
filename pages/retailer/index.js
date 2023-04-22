@@ -5,6 +5,8 @@ import { Button } from "@mui/material";
 import styles from "../../styles/Button.module.css";
 import BackButton from "../../components/BackButton";
 import FormVerifyProduct from "../../components/Forms/FormVerifyProduct";
+import FormMarkProductAsStolen from "../../components/Forms/FormMarkProductAsStolen";
+import FormTransferOwnership from "../../components/Forms/FormTransferOwnership";
 
 const index = () => {
   const { contract, connectWallet } = useEthereum();
@@ -15,12 +17,16 @@ const index = () => {
     connectWallet();
   }, []);
 
+  const addInitialOwner = async (qrCodeValue,address) => {
+    await contract.transferFromRetailerToInitialOwner(qrCodeValue, address)
+  }
+
   const backContent = (
     <div>
     <BackButton onClick={()=>{setFlip(false);}}></BackButton>
     {formSelected==='Verify Product' && <FormVerifyProduct contract={contract}/>}
-    {formSelected==='Transfer Ownership' && <FormVerifyProduct contract={contract}/>}
-    {formSelected==='Mark Product As Stolen' && <FormVerifyProduct contract={contract}/>}
+    {formSelected==='Transfer Ownership' && <FormTransferOwnership addNewOwner={addInitialOwner}/>}
+    {formSelected==='Mark Product As Stolen' && <FormMarkProductAsStolen contract={contract}/>}
     </div>
   );
   const frontContent = (
