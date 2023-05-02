@@ -7,15 +7,23 @@ import BackButton from "../../components/BackButton";
 import FormVerifyProduct from "../../components/Forms/FormVerifyProduct";
 import FormMarkProductAsStolen from "../../components/Forms/FormMarkProductAsStolen";
 import FormTransferOwnership from "../../components/Forms/FormTransferOwnership";
+import { useRouter } from "next/router";
 
 const index = () => {
-  const { contract, connectWallet } = useEthereum();
+  const { contract, connectWallet, user } = useEthereum();
+  const router=useRouter();
+
   const [formSelected, setFormSelected] = useState("");
   const [flip, setFlip] = useState(false);
 
   useEffect(() => {
     connectWallet();
   }, []);
+  useEffect(()=>{
+    if(user!=null && user!=='customer'){
+      router.push('/');
+    }
+  }, [user]);
 
   const addNewOwner = async (qrCodeValue,address) =>{
     await contract.transferOwnershipFromCustomer(qrCodeValue,address)
@@ -32,7 +40,7 @@ const index = () => {
         <FormVerifyProduct contract={contract} />
       )}
       {formSelected === 'Transfer From Customer To Customer' && (
-        <FormTransferOwnership addNewOwner={addNewOwner}/>
+        <FormTransferOwnership addNewOwner={addNewOwner} newOwner="New Customer"/>
       )}
       {formSelected === 'Mark Product As Stolen' && (
         <FormMarkProductAsStolen contract={contract} />

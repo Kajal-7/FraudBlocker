@@ -12,7 +12,7 @@ function Homepage() {
   const router  = useRouter()
 
   useEffect(() => {
-    connectWallet();   
+    connectWallet()
   }, []);
 
   function handleClick() {
