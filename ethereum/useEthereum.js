@@ -15,7 +15,8 @@ function useEthereum(){
            
             const provider = new ethers.providers.Web3Provider(ethereum);
             // find the account this will open metamask 
-            await provider.send("eth_requestAccounts", []);
+            const acc = await provider.send("eth_requestAccounts", []);
+            console.log('Accounts => ',acc)
 
             // if metamask account changed reload the window
             // can add functions for network and chain change also
@@ -26,14 +27,14 @@ function useEthereum(){
             const signer = provider.getSigner();
             const address = await signer.getAddress();
             const productAuthenticationContract = new ethers.Contract(
-              '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+              '0x7660a28495A9447A7B9577943F1970EE9F9D1ba7',
               contractJSON.abi,
               signer
             )
            
             const _user = await productAuthenticationContract.whoIsTheUser(address)
           
-          
+            console.log(address,_user)
             setUser(_user)
             setAccount(address)
             setContract(productAuthenticationContract);

@@ -18,7 +18,7 @@ const index = () => {
   }, []);
 
   const addInitialOwner = async (qrCodeValue,address) => {
-    await contract.transferFromRetailerToInitialOwner(qrCodeValue, address)
+    await contract.transferFromRetailerToIntialOwner(qrCodeValue, address)
   }
 
   const backContent = (

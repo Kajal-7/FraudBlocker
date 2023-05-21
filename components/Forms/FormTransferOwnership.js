@@ -14,7 +14,7 @@ const FormTransferOwnership = ({ addNewOwner }) => {
 
   function handleChangeInOwnership() {
     setLoading(true)
-
+    console.log(addNewOwner.toString())
     addNewOwner(qrCodeValue,address)
       .then(() => {
         setLoading(false)
@@ -41,7 +41,7 @@ const FormTransferOwnership = ({ addNewOwner }) => {
   return (
     <div className='container'>
       <div className='card'>
-        <a className='singup'>Transfer To Retailer</a>
+        <a className='singup'>Transfer Ownership</a>
         {getQR ? (
           <>
             <BackButton
@@ -72,7 +72,7 @@ const FormTransferOwnership = ({ addNewOwner }) => {
               onChange={(e) => setAddress(e.target.value)}
               value={address}
             />
-            <span className='user'>Retailer Address</span>
+            <span className='user'>Address</span>
           </div>
         )}
 
