@@ -4,7 +4,7 @@ import { QrReader } from 'react-qr-reader'
 import Loader from '../Loader'
 import { Alert } from '@mui/material'
 
-const FormTransferOwnership = ({ addNewOwner }) => {
+const FormTransferOwnership = ({ addNewOwner, newOwner }) => {
   const [address, setAddress] = useState()
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(false)
@@ -41,7 +41,7 @@ const FormTransferOwnership = ({ addNewOwner }) => {
   return (
     <div className='container'>
       <div className='card'>
-        <a className='singup'>Transfer Ownership</a>
+        <a className='singup'>Transfer To {newOwner}</a>
         {getQR ? (
           <>
             <BackButton

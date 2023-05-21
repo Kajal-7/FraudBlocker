@@ -8,12 +8,19 @@ import FormVerifyProduct from '../../components/Forms/FormVerifyProduct'
 import FormMarkProductAsStolen from '../../components/Forms/FormMarkProductAsStolen'
 import styles from '../../styles/Button.module.css';
 import FormTransferOwnership from '../../components/Forms/FormTransferOwnership'
+import { useRouter } from 'next/router'
 
 const index = () => {
 
-  const {contract,connectWallet} = useEthereum()
-  useEffect(()=>{connectWallet()},[])
+  const {contract,connectWallet, user} = useEthereum()
+  const router = useRouter();
 
+  useEffect(()=>{connectWallet()},[])
+  useEffect(()=>{
+    if(user!=null && user!=='manufacturer'){
+      router.push('/');
+    }
+  }, [user]);
   const [formSelected, setFormSelected] = useState('Customer')
   const [flip, setFlip] = useState(false)
 
@@ -26,7 +33,7 @@ const index = () => {
       <BackButton onClick={() => {setFlip(false); }} />
       {formSelected === 'Verify Product' && <FormVerifyProduct contract={contract} />}
       {formSelected === 'Create Product' && <FormCreateProduct contract={contract}/>}
-      {formSelected === 'Add Retailer' && <FormTransferOwnership addNewOwner={addRetailer} />}
+      {formSelected === 'Add Retailer' && <FormTransferOwnership addNewOwner={addRetailer} newOwner="Retailer" />}
       {formSelected === 'Mark Product As Stolen' && <FormMarkProductAsStolen contract={contract} />}
     </div>
   )
